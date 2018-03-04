@@ -1,0 +1,109 @@
+#!/bin/bash
+
+# Shamelessly ripped from https://github.com/adlogix/docker-machine-nfs
+# That file sadly has a bunch of MacOS bash syntax in it, but in a word
+# what it does is the following:
+
+machine=$1
+if [[ -z "$machine" ]]; then
+    echo "Usage: $0 <machine>"
+    exit
+fi
+
+echo "Getting docker machine IP"
+machine_ip=$(docker-machine ip $machine)
+if [[ -z "$machine_ip" ]]; then
+    echo "Could not get docker machine IP!"; exit 1
+fi
+echo "- $machine_ip"
+
+echo "Getting network id"
+network_id=$(VBoxManage showvminfo $1 --machinereadable |
+    grep hostonlyadapter | cut -d'"' -f2)
+if [ "" = "${network_id}" ]; then
+    echo "Could not find the virtualbox net name!"; exit 1
+fi
+echo "- $network_id"
+
+echo "Getting NFS host IP"
+nfshost_ip=$(VBoxManage list hostonlyifs |
+    grep "${network_id}" -A 3 | grep IPAddress |
+    cut -d ':' -f2 | xargs);
+if [ "" = "${nfshost_ip}" ]; then
+    echo "Could not find the virtualbox net IP!"; exit 1
+fi
+echo "- $nfshost_ip"
+
+echo "Updating /etc/exports"
+exports_begin="# docker-machine-nfs-begin $prop_machine_name"
+exports_end="# docker-machine-nfs-end $prop_machine_name"
+
+# Remove old docker-machine-nfs exports
+exports=$(cat /etc/exports | \
+    tr "\n" "\r" | \
+    sed "s/${exports_begin}.*${exports_end}//" | \
+    tr "\r" "\n"
+)
+
+# Write new exports blocks beginning
+exports="${exports}\n${exports_begin}\n"
+
+shared_folder=$(readlink -f $(dirname $0))
+exports="${exports}$shared_folder $machine_ip(rw,no_subtree_check)\n"
+
+# Write new exports block ending
+exports="${exports}${exports_end}"
+
+#Export to file
+printf "$exports\n" | sudo tee /etc/exports >/dev/null
+echo "- done"
+
+echo "Restarting NFS server"
+sudo service nfs-server restart
+echo "- done"
+
+# render bootlocal.sh and copy bootlocal.sh over to Docker Machine
+# (this will override an existing /var/lib/boot2docker/bootlocal.sh)
+
+echo "Writing bootlocal.sh to docker machine"
+bootlocalsh='#!/bin/sh
+sudo mkdir -p '$shared_folder'
+sudo /usr/local/etc/init.d/nfs-client start
+sudo mount -t nfs -o rw,noacl,async '$nfshost_ip':'$shared_folder' '$shared_folder'
+'
+
+file="/var/lib/boot2docker/bootlocal.sh"
+docker-machine ssh $machine \
+  "echo '$bootlocalsh' | sudo tee $file && sudo chmod +x $file && sync" > /dev/null
+sleep 2
+echo "- done"
+
+echo "Restarting docker machine"
+docker-machine restart $machine > /dev/null
+echo "- done"
+
+echo "Mounting NFS done"
+
+# Included as per the wishes of Toni Van de Voorde - http://www.devexp.eu/
+#
+# The MIT License (MIT)
+# Copyright © 2018 Alex Moon <formsatz@gmail.com>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the “Software”), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#

@@ -1,0 +1,39 @@
+version: '2'
+services:
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    links:
+      - tornado
+    ports:
+      - "80:80"
+      - "443:443"
+
+  tornado:
+    image: skiftcreative/supervisor:latest
+    volumes:
+      - "./src/frontend:/opt/readus"
+    ports:
+      - "8000:8000"
+    links:
+      - spring
+
+  spring:
+    image: tomcat:latest
+    container_name: spring
+    links:
+      - neo4j
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./src/backend/target:/opt/readus"
+
+  neo4j:
+    image: neo4j:latest
+    container_name: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - "./var/data:/data"
