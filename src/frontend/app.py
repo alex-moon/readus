@@ -1,6 +1,11 @@
+#!/usr/bin/env python
+
+from tornado import websocket
+from tornado.ioloop import IOLoop
+
 import tornado
 
-class EchoHandler(tornado.websocket.WebSocketHandler):
+class EchoHandler(websocket.WebSocketHandler):
     def open(self, *args, **kwargs):
         self.application.pc.add_event_listener(self)
 
@@ -16,8 +21,8 @@ class MainHandler(tornado.web.RequestHandler):
 
 if __name__ == "__main__":
     application = tornado.web.Application([
-        (r"/echo", EchoHandler),
-        (r"/", MainHandler),
+        (r"^/echo", EchoHandler),
+        (r"^/", MainHandler),
     ])
     server = tornado.httpserver.HTTPServer(application)
     server.bind(8000)
