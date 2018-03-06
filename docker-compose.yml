@@ -24,24 +24,24 @@ services:
       - './build/tornado/conf:/etc/supervisor/conf.d'
     ports:
       - "8000:8000"
-    # links:
-    #  - spring
+    links:
+     - spring
 
-  # spring:
-  #   build: ./build/spring
-  #   container_name: spring
-  #   links:
-  #     - neo4j
-  #   ports:
-  #     - "8080:8080"
-  #   volumes:
-  #     - "./src/backend/target:/opt/readus"
+  spring:
+    build: ./build/spring
+    container_name: spring
+    links:
+      - neo4j
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./src/backend/target:/opt/readus"
 
-  # neo4j:
-  #   build: ./build/neo4j
-  #   container_name: neo4j
-  #   ports:
-  #     - "7474:7474"
-  #     - "7687:7687"
-  #   volumes:
-  #     - "./var/data:/data"
+  neo4j:
+    build: ./build/neo4j
+    container_name: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - "./var/data:/data"
