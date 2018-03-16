@@ -1,41 +1,42 @@
 version: '2'
 services:
 
-  # nginx:
-  #   build: ./build/nginx
-  #   container_name: nginx
-  #   links:
-  #     - tornado
-  #   volumes_from:
-  #     - tornado
-  #   volumes:
-  #     - './var/log/nginx:/var/log/nginx'
-  #     - './build/nginx/conf:/etc/nginx/conf.d'
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
+  nginx:
+    build: ./build/nginx
+    container_name: nginx
+    links:
+      - tornado
+    volumes_from:
+      - tornado
+    volumes:
+      - './var/log/nginx:/var/log/nginx'
+      - './build/nginx/conf:/etc/nginx/conf.d'
+    ports:
+      - "80:80"
+      - "443:443"
 
-  # tornado:
-  #   build: ./build/tornado
-  #   container_name: tornado
-  #   volumes:
-  #     - "./src/frontend:/opt/readus"
-  #     - './var/log/supervisord:/var/log/supervisord'
-  #     - './build/tornado/conf:/etc/supervisor/conf.d'
-  #   ports:
-  #     - "8000:8000"
-  #   links:
-  #    - spring
+  tornado:
+    build: ./build/tornado
+    container_name: tornado
+    volumes:
+      - "./src/frontend:/opt/readus"
+      - './var/log/supervisord:/var/log/supervisord'
+      - './build/tornado/conf:/etc/supervisor/conf.d'
+    ports:
+      - "8000:8000"
+    links:
+     - spring
 
   spring:
     build: ./build/spring
     container_name: spring
     volumes:
       - "./src/backend/target:/opt/readus"
+
     links:
       - neo4j
     ports:
-      - "8080:8080"
+      - "8888:8888"
 
   neo4j:
     build: ./build/neo4j
