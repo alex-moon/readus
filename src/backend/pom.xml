@@ -6,7 +6,6 @@
     <groupId>com.github.alex_moon</groupId>
     <artifactId>readus</artifactId>
     <version>latest</version>
-	<packaging>war</packaging>
 	<name>readus</name>
 	<description>A social network for text files</description>
 

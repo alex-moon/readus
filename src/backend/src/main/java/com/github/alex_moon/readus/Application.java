@@ -27,7 +27,7 @@ public class Application extends Neo4jConfiguration {
 
     @Bean
     public GraphDatabaseService graphDatabaseService() {
-        return new SpringCypherRestGraphDatabase("http://127.0.0.1:7474/db/data", "neo4j", "fuck");
+        return new SpringCypherRestGraphDatabase("http://neo4j:7474/db/data", "neo4j", "neo4j");
     }
 
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

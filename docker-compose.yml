@@ -30,12 +30,12 @@ services:
   spring:
     build: ./build/spring
     container_name: spring
+    volumes:
+      - "./src/backend/target:/opt/readus"
     links:
       - neo4j
     ports:
       - "8080:8080"
-    volumes:
-      - "./src/backend/target:/opt/readus"
 
   neo4j:
     build: ./build/neo4j
