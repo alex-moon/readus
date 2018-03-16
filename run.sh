@@ -34,15 +34,15 @@ if [[ "$(docker-machine status $machine)" != "Running" ]]; then
     docker-machine start $machine
 fi
 
-green "Regenerating certs"
-yes | docker-machine regenerate-certs $machine
+# green "Regenerating certs"
+# yes | docker-machine regenerate-certs $machine
 
-green "Mounting NFS"
-if [[ "Linux" == "$(uname -s)" ]]; then
-    ./docker-machine-nfs-linux $machine
-else
-    docker-machine-nfs $machine
-fi
+# green "Mounting NFS"
+# if [[ "Linux" == "$(uname -s)" ]]; then
+#     ./docker-machine-nfs-linux $machine
+# else
+#     docker-machine-nfs $machine
+# fi
 
 green "Loading env"
 eval $(docker-machine env $machine)
