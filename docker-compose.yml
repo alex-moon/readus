@@ -20,7 +20,7 @@ services:
     container_name: tornado
     volumes:
       - "./src/frontend:/opt/readus"
-      - './var/log/supervisord:/var/log/supervisord'
+      - './var/log/supervisord/tornado:/var/log/supervisord'
       - './build/tornado/conf:/etc/supervisor/conf.d'
     ports:
       - "8000:8000"
@@ -32,6 +32,8 @@ services:
     container_name: spring
     volumes:
       - "./src/backend/target:/opt/readus"
+      - './var/log/supervisord/spring:/var/log/supervisord'
+      - './build/spring/conf:/etc/supervisor/conf.d'
 
     links:
       - neo4j
