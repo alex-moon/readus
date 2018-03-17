@@ -17,7 +17,13 @@ class EchoHandler(websocket.WebSocketHandler):
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("Hello, world")
+        from services import spring
+        self.write("<html><body>")
+        self.write("<h1>Hello, world</h1>")
+        self.write("<ul>")
+        for text in spring.Spring.get_texts():
+            self.write("<li><strong>%s</strong>: %s</li>" % (text['uuid'], text['rawText']))
+        self.write("</body></html>")
 
 if __name__ == "__main__":
     application = tornado.web.Application([
