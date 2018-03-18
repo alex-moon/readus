@@ -5,8 +5,23 @@ Social Network for Text Files
 
 You're going to need a couple of things installed:
 
+- yarn
 - docker-machine
-- bower
+
+On linux this is as simple as running the following:
+
+```
+# npm
+curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# yarn and vue.js
+sudo npm install -g yarn vue-cli
+
+# docker-machine
+curl -L https://github.com/docker/machine/releases/download/v0.14.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine
+sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+```
 
 Then:
 

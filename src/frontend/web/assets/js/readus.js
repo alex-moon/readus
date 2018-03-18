@@ -1,1 +1,3 @@
-alert('poo');
+define(function(require) {
+
+});

@@ -58,3 +58,5 @@ ENV/
 # readus
 notes.txt
 
+src/frontend/web/assets/vendor
+

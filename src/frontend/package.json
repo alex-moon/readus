@@ -3,17 +3,8 @@
   "version": "0.0.1",
   "description": "Social network for text files",
   "main": "web/assets/js/readus.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/alex-moon/readus.git"
-  },
+  "repository": "https://github.com/alex-moon/readus.git",
   "author": "Alex Moon",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/alex-moon/readus/issues"
-  },
-  "homepage": "https://github.com/alex-moon/readus#readme"
+  "private": false
 }
