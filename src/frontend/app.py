@@ -4,6 +4,7 @@ from tornado import websocket
 from tornado.ioloop import IOLoop
 
 import tornado
+import os
 
 class EchoHandler(websocket.WebSocketHandler):
     def open(self, *args, **kwargs):
@@ -15,20 +16,21 @@ class EchoHandler(websocket.WebSocketHandler):
     def on_close(self):
         self.application.pc.remove_event_listener(self)
 
-class MainHandler(tornado.web.RequestHandler):
+class ExampleHandler(tornado.web.RequestHandler):
     def get(self):
         from services import spring
-        self.write("<html><body>")
-        self.write("<h1>Hello, world</h1>")
-        self.write("<ul>")
+        self.set_header("Content-Type", "text/plain")
         for text in spring.Spring.get_texts():
-            self.write("<li><strong>%s</strong>: %s</li>" % (text['uuid'], text['rawText']))
-        self.write("</body></html>")
+            self.write("%s\n%s\n\n" % (text['uuid'], text['rawText']))
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('web/index.html')
 
 if __name__ == "__main__":
     application = tornado.web.Application([
         (r"^/echo", EchoHandler),
-        (r"^/", MainHandler),
+        (r"^/", IndexHandler),
     ])
     server = tornado.httpserver.HTTPServer(application)
     server.bind(8000)
