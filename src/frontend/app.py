@@ -24,13 +24,13 @@ class ExampleHandler(tornado.web.RequestHandler):
             self.write("%s\n%s\n\n" % (text['uuid'], text['rawText']))
 
 class IndexHandler(tornado.web.RequestHandler):
-    def get(self):
+    def get(self, path=None):
         self.render('web/index.html')
 
 if __name__ == "__main__":
     application = tornado.web.Application([
         (r"^/echo", EchoHandler),
-        (r"^/", IndexHandler),
+        (r"^/(.*)", IndexHandler),
     ])
     server = tornado.httpserver.HTTPServer(application)
     server.bind(8000)
