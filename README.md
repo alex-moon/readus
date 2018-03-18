@@ -3,7 +3,12 @@ Social Network for Text Files
 
 ## Getting Started
 
-First up, install docker-machine. Then:
+You're going to need a couple of things installed:
+
+- docker-machine
+- bower
+
+Then:
 
 ```
 ./run.sh
