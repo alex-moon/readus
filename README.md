@@ -62,3 +62,17 @@ Neo4J: http://readus:7474
 
 That's right! Spring HATEOAS and Neo4J both host user-friendly dashboards out of the box, which
 makes development a breeze.
+
+## Client Side
+
+To see your vue.js app you'll need to run the following:
+
+```
+cd src/frontend/web
+npm run build
+../../../ssh.sh
+supervisorctl restart all
+
+```
+
+This isn't ideal.

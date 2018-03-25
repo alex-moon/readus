@@ -25,7 +25,7 @@ class ExampleHandler(tornado.web.RequestHandler):
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self, path=None):
-        self.render('web/index.html')
+        self.render('web/dist/index.html')
 
 if __name__ == "__main__":
     application = tornado.web.Application([
