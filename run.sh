@@ -55,12 +55,40 @@ docker-compose up -d
 
 printf "Do you want to rebuild Spring? "
 if confirm; then
-    ./spring.sh
+    green "Running maven package"
+    cd src/backend
+    mvn package
+    build_success=$?
+    cd ../../
+
+    if [[ $build_success != 0 ]]; then
+        red "Build failed"
+    else
+        green "Restarting Spring"
+        container_id=$(docker ps | grep spring | head -n1 | awk '{ print $1 }')
+        docker exec $container_id supervisorctl restart all
+        green "Build succeeded"
+    fi
 fi
 
 printf "Do you want to rebuild Vue.js? "
 if confirm; then
-    ./vue.sh
+    green "Running npm build"
+
+    cd src/frontend/web
+    npm run build
+    build_success=$?
+    cd ../../../
+
+    if [[ $build_success != 0 ]]; then
+        growler-error "Vue.js build failed"
+        red "Build failed"
+    else
+        green "Restarting tornado"
+        container_id=$(docker ps | grep tornado | head -n1 | awk '{ print $1 }')
+        docker exec $container_id supervisorctl restart all
+        green "Build succeeded"
+    fi
 fi
 
 green "Done - your IP is:"

@@ -12,7 +12,7 @@ public class ReadusController {
     @RequestMapping("")
     public MessageResource index() {
         MessageResource resource = new MessageResource();
-        resource.setMessage("Welcome to fuckin Noise bitches");
+        resource.setMessage("Readus is a social network for text files");
         resource.add(
             ControllerLinkBuilder
             .linkTo(TextController.class)

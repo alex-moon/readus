@@ -10,6 +10,8 @@ public class Text {
     
     @Indexed private String uuid;
 
+    private String name;
+
     private String rawText;
 
     public Long getId() {
@@ -34,5 +36,13 @@ public class Text {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

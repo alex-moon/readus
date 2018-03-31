@@ -30,19 +30,4 @@ public class TextController {
         resource.add(entityLinks.linkToCollectionResource(Text.class));
         return resource;
     }
-
-    @RequestMapping(value = "{id}/tokenize/", method = RequestMethod.POST)
-    public Text tokenize(@PathVariable Long id) {
-        Text text = textRepository.findOne(id);
-        return text;
-    }
-
-    @RequestMapping(value = "{id}/tokenize/")
-    public MessageResource describeTokenize(@PathVariable Long id) {
-        MessageResource result = new MessageResource();
-        result.setMessage(
-            "Use this endpoint to begin asynchronous tokenisation"
-        );
-        return result;
-    }
 }
