@@ -20,15 +20,15 @@ function red() { echo "${red}${@}${reset}"; }
 function green() { echo "${green}${@}${reset}"; }
 function yellow() { echo "${yellow}${@}${reset}"; }
 
-# vars
-machine=readus
-
+# let's do it
 green "Running npm build"
 cd src/frontend/web
 npm run build
 cd ../../../
 
 green "Restarting tornado"
+machine=readus
+eval $(docker-machine env $machine)
 container=tornado
 container_id=$(docker ps | grep $container | head -n1 | awk '{ print $1 }')
 
@@ -37,4 +37,5 @@ if [[ -z "$container_id" ]]; then
     exit 1
 fi
 
-docker exec -it $container_id "supervisorctl restart all"
+docker exec -it $container_id supervisorctl restart all
+
