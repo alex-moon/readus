@@ -5,16 +5,17 @@ from tornado.ioloop import IOLoop
 
 import tornado
 import os
+import json
 
 class EchoHandler(websocket.WebSocketHandler):
     def open(self, *args, **kwargs):
-        self.application.pc.add_event_listener(self)
+        pass
 
     def on_message(self, message):
         self.write_message(json.dumps({'message': message}))
 
     def on_close(self):
-        self.application.pc.remove_event_listener(self)
+        pass
 
 class ExampleHandler(tornado.web.RequestHandler):
     def get(self):

@@ -8,6 +8,7 @@ COPY requirements.txt /tmp/requirements.txt
 RUN apt-get -y update
 RUN apt-get -y install vim less python3.4 python3-pip ca-certificates
 
+RUN pip3 install --upgrade setuptools
 RUN pip3 install -r /tmp/requirements.txt
 
 WORKDIR /opt/readus

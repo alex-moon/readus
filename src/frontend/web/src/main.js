@@ -10,9 +10,12 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import './assets/css/readus.css'
 
+import VueNativeSock from 'vue-native-websocket'
+
 Vue.config.productionTip = false
 
 Vue.use(BoostrapVue)
+Vue.use(VueNativeSock, 'ws://192.168.99.100/echo', { format: 'json' })
 
 /* eslint-disable no-new */
 new Vue({
