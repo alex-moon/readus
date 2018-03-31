@@ -53,5 +53,15 @@ docker rm -f $(docker ps -a -q)
 green "Starting docker containers"
 docker-compose up -d
 
+printf "Do you want to rebuild Spring? "
+if confirm; then
+    ./spring.sh
+fi
+
+printf "Do you want to rebuild Vue.js? "
+if confirm; then
+    ./vue.sh
+fi
+
 green "Done - your IP is:"
 docker-machine ip $machine
