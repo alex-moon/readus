@@ -65,14 +65,9 @@ makes development a breeze.
 
 ## Client Side
 
-To see your vue.js app you'll need to run the following:
+To rebuild vue.js, simply:
 
 ```
-cd src/frontend/web
-npm run build
-../../../ssh.sh
-supervisorctl restart all
+./frontend.sh
 
 ```
-
-This isn't ideal.
