@@ -8,5 +8,5 @@ class Spring:
         return texts
 
     def call(self, method, action):
-        if method === 'get':
+        if method == 'get':
             return requests.get('http://spring:8080%s' % action)

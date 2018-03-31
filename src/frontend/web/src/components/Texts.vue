@@ -18,7 +18,6 @@ export default {
   name: 'Texts',
   created () {
     this.$options.sockets.onmessage = (data) => this.message(data)
-    this.$socket.sendObj({'action': 'get', 'method': '/texts'})
   },
   data () {
     return {
@@ -42,7 +41,10 @@ export default {
     },
     onTextItemClicked: function (event) {
       let uuid = event.currentTarget.getAttribute('uuid')
-      this.$socket.sendObj({'uuid': uuid})
+      this.$socket.sendObj({
+        'method': 'get',
+        'action': '/texts'
+      })
       for (let text of this.$data.texts) {
         if (text.uuid === uuid) {
           text.isActive = true

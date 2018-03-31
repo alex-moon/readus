@@ -11,11 +11,12 @@ from services import spring
 
 class WebSocketHandler(websocket.WebSocketHandler):
     def on_message(self, message):
-        if message['method'] and message['action']:
-            self.write_message(
-                self.application.spring.call(message['method'], message['action'])
-            )
-        
+        data = json.loads(message)
+        if 'method' in data and 'action' in data:
+            response = self.application.spring.call(data['method'], data['action'])
+            self.write_message(json.dumps(response.json()))
+            return
+
         self.write_message(json.dumps({'message': message}))
 
 class ExampleHandler(tornado.web.RequestHandler):
@@ -38,3 +39,4 @@ if __name__ == "__main__":
     server.bind(8000)
     server.start(0)
     IOLoop.current().start()
+ 
