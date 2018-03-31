@@ -18,12 +18,12 @@ export default {
   color: #3f2834;
   width: 1000px;
   margin: 20px auto;
-  padding: 10px;
-  /*font-family: "Source Sans Pro", sans-serif;*/
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 6px 6px 10px;
 }
 
 h1 {
-  /*font-family: "Lato", sans-serif;*/
   margin-top: 0;
 }
 </style>

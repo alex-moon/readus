@@ -20,6 +20,20 @@ function red() { echo "${red}${@}${reset}"; }
 function green() { echo "${green}${@}${reset}"; }
 function yellow() { echo "${yellow}${@}${reset}"; }
 
+function growler() {
+    if [[ ! -z "`which notify-send`" ]]; then
+        notify-send -i $1 -t 100 readus "$2"
+    else
+        red "Cannot create growler - try: sudo apt-get install notify-osd"
+    fi
+}
+function growler-success() {
+    growler emblem-default "$1"
+}
+function growler-error() {
+    growler error "$1"
+}
+
 # let's do it
 machine=readus
 container=tornado
@@ -44,21 +58,14 @@ while true; do
         cd ../../../
 
         if [[ $build_success != 0 ]]; then
+            growler-error "Vue.js build failed"
             red "Build failed"
-            if [[ ! -z "`which notify-send`" ]]; then
-                notify-send -i error -t 100 readus "Build failed"
-            else
-                red "Cannot create growler - try: sudo apt-get install notify-osd"
-            fi
         else
             green "Restarting tornado"
             docker exec $container_id supervisorctl restart all
 
-            if [[ ! -z "`which notify-send`" ]]; then
-                notify-send -i emblem-default -t 100 readus "Build succeeded"
-            else
-                red "Cannot create growler - try: sudo apt-get install notify-osd"
-            fi
+            growler-success "Vue.js build succeeded"
+            green "Build succeeded"
         fi
 
     done
