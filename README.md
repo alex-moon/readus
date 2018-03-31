@@ -65,9 +65,20 @@ makes development a breeze.
 
 ## Client Side
 
-To rebuild vue.js, simply:
+If you install `inotify-tools`:
+
+```
+sudo apt-get install inotify-tools
+```
+
+then you can get Vue.js edits hotloading by running:
+
 
 ```
 ./frontend.sh
 
 ```
+
+It is also possible to run the NPM hotloader behind nginx, but I'm not keen to do this
+as it means there's garbage in the nginx conf. I might consider it if this gets really
+annoying, but for now this is fine for the purposes.

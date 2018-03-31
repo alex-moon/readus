@@ -21,15 +21,9 @@ function green() { echo "${green}${@}${reset}"; }
 function yellow() { echo "${yellow}${@}${reset}"; }
 
 # let's do it
-green "Running npm build"
-cd src/frontend/web
-npm run build
-cd ../../../
-
-green "Restarting tornado"
 machine=readus
-eval $(docker-machine env $machine)
 container=tornado
+eval $(docker-machine env $machine)
 container_id=$(docker ps | grep $container | head -n1 | awk '{ print $1 }')
 
 if [[ -z "$container_id" ]]; then
@@ -37,5 +31,35 @@ if [[ -z "$container_id" ]]; then
     exit 1
 fi
 
-docker exec -it $container_id supervisorctl restart all
+while true; do
+    inotifywait -e close_write,moved_to,create -r src/frontend/web/src |
+    while read -r directory events filename; do
 
+        green "Saw $events on $directory$filename"
+
+        green "Running npm build"
+        cd src/frontend/web
+        npm run build
+        build_success=$?
+        cd ../../../
+
+        if [[ $build_success != 0 ]]; then
+            red "Build failed"
+            if [[ ! -z "`which notify-send`" ]]; then
+                notify-send -i error -t 100 readus "Build failed"
+            else
+                red "Cannot create growler - try: sudo apt-get install notify-osd"
+            fi
+        else
+            green "Restarting tornado"
+            docker exec $container_id supervisorctl restart all
+
+            if [[ ! -z "`which notify-send`" ]]; then
+                notify-send -i emblem-default -t 100 readus "Build succeeded"
+            else
+                red "Cannot create growler - try: sudo apt-get install notify-osd"
+            fi
+        fi
+
+    done
+done

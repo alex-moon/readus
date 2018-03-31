@@ -10,7 +10,6 @@ const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
 const webpackConfig = require('./webpack.prod.conf')
-// const webpackConfig = require('./webpack.dev.conf')
 
 const spinner = ora('building for production...')
 spinner.start()
@@ -19,7 +18,9 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err
   webpack(webpackConfig, (err, stats) => {
     spinner.stop()
+
     if (err) throw err
+
     process.stdout.write(stats.toString({
       colors: true,
       modules: false,
@@ -30,6 +31,11 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
 
     if (stats.hasErrors()) {
       console.log(chalk.red('  Build failed with errors.\n'))
+      process.exit(1)
+    }
+
+    if (stats.hasWarnings()) {
+      console.log(chalk.red('  Build failed with warnings.\n'))
       process.exit(1)
     }
 
