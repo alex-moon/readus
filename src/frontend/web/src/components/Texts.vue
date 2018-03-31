@@ -18,6 +18,7 @@ export default {
   name: 'Texts',
   created () {
     this.$options.sockets.onmessage = (data) => this.message(data)
+    this.$socket.sendObj({'action': 'get', 'method': '/texts'})
   },
   data () {
     return {

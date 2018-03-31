@@ -57,7 +57,7 @@ for this IP address:
 then go to your browser:
 
 readus: http://readus
-Spring: http://readus:8888
+Spring: http://readus:8080
 Neo4J: http://readus:7474
 
 That's right! Spring HATEOAS and Neo4J both host user-friendly dashboards out of the box, which
