@@ -16,9 +16,7 @@ import Texts from './Texts'
 export default {
   name: 'Dashboard',
   data () {
-    return {
-
-    }
+    return {}
   },
   components: {
     'texts': Texts
